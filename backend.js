@@ -47,8 +47,8 @@ app.post("/filmes", async (req, res) => {
 });
 
 //Cadastro de usuário
-//POST em http://localhost:3000/signup
-app.post("/signup", async (req, res) => {
+//POST em http://localhost:3000/auth/signup
+app.post("/auth/signup", async (req, res) => {
     try {
         const { login, password } = req.body;
         if (!login) {
@@ -69,11 +69,12 @@ app.post("/signup", async (req, res) => {
         res.status(201).json({ msg: "Usuário criado com sucesso!" }).end();
     } catch (error) {
         console.log("Erro ao cadastrar usuário: " + error);
-        res.status(409).json({ msg: "Erro ao cadastrar usuário" }).end();
+        return res.status(409).json({ msg: "Usuário já existente" }).end();
     }
 });
-
-app.post("/login", async (req, res) => {
+//Login de usuário
+//POST em http://localhost:3000/auth/login
+app.post("/auth/login", async (req, res) => {
     const { login, password } = req.body;
     if (!login) {
         return res.status(400).json({ msg: "Login faltando!" });
@@ -93,7 +94,7 @@ app.post("/login", async (req, res) => {
         }
 
         const token = jwt.sign({ login: login }, "chave-secreta", {
-            expiresIn: "1h",
+            expiresIn: "2h",
         });
 
         res.status(200).json({

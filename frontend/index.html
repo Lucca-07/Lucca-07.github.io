@@ -15,13 +15,25 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-
+                    <h3 class="modal-title fs-5">Cadastro de usuário</h3>
                 </div>
                 <div class="modal-body">
-                    
+
+                    <div class="alert alert-dismissible fade d-none" id="alert-modal-cadastro" role="alert"></div>
+                    <form>
+                        <div class="mb-3">
+                            <label for="userCadastroInput" class="col-form-label">Usuário</label>
+                            <input id="userCadastroInput" type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="passCadastroInput" class="col-form-label">Senha</label>
+                            <input id="passCadastroInput" type="text" class="form-control">
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
-
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" type="button" onclick="cadastrarUsuario()">Cadastrar</button>
                 </div>
             </div>
         </div>
@@ -31,20 +43,16 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <nav class="navbar navbar-expand-md bg-light">
-                    <a href="#" class="navbar-brand">Filmes</a>
-                    <button class="navbar-toggler" 
-                            type="button" 
-                            data-bs-toggle="collapse" 
-                            data-bs-target="#myNav"
-                            aria-controls="myNav" 
-                            aria-expanded="false" 
-                            aria-label="Toggle navigation">
+                    <a href="#" class="navbar-brand">Filme</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNav"
+                        aria-controls="myNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="myNav">
                         <div class="navbar-nav ms-auto">
                             <a href="#" class="nav-link active me-2" aria-current="page">Login</a>
-                            <a href="#" class="nav-link active me-2">Novo Usuário</a>
+                            <a href="#" class="nav-link active me-2" data-bs-toggle="modal"
+                                data-bs-target="#modalCadastro">Cadastrar</a>
                         </div>
                     </div>
                 </nav>
@@ -56,9 +64,9 @@
 
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="d-none alert alert-danger alert-dismissible fade" role="alert">
+                <div class="d-none alert alert-filme alert-danger alert-dismissible fade" role="alert">
                     Preencha todos os campos!
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert-filme" aria-label="close">
 
                     </button>
                 </div>
@@ -69,13 +77,13 @@
             <div class="col-md-8 col-lg-4 d-flex justify-content-center">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="tituloinput" placeholder="Título do Filme:">
-                    <label for="tituloinput">Título do Filme</label>
+                    <label for="tituloinput">Titulo</label>
                 </div>
             </div>
             <div class="col-md-8 col-lg-4 d-flex justify-content-center">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="sinopseinput" placeholder="Sinopse do Filme">
-                    <label for="sinopseinput" class="fs-6">Sinopse do Filme</label>
+                    <label for="sinopseinput" class="fs-6">Sinopse</label>
                 </div>
             </div>
         </div>
