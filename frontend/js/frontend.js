@@ -6,15 +6,7 @@ async function obtemFilmes() {
     const URLcompleta = `${protocol}${baseURL}${filmesEndpoint}`;
     const filmes = (await axios.get(URLcompleta)).data;
 
-    let tabela = document.querySelector(".filmes");
-    let corpo = tabela.getElementsByTagName("tbody")[0];
-    filmes.forEach((filme) => {
-        let linhaNova = corpo.insertRow(0);
-        let celulaTitulo = linhaNova.insertCell(0);
-        let celulaSinopse = linhaNova.insertCell(1);
-        celulaTitulo.innerHTML = filme.titulo;
-        celulaSinopse.innerHTML = filme.sinopse;
-    });
+    exibirTabela(".filmes", filmes);
 }
 
 async function cadastrarFilme() {
@@ -32,24 +24,22 @@ async function cadastrarFilme() {
             sinopse,
         };
         const filmes = (await axios.post(URLcompleta, dados)).data;
-        let tabela = document.querySelector(".filmes");
-        let corpo = tabela.getElementsByTagName("tbody")[0];
-        corpo.innerHTML = "";
-        filmes.forEach((filme) => {
-            let linha = corpo.insertRow(0);
-            let celulaTitulo = linha.insertCell(0);
-            let celulaSinopse = linha.insertCell(1);
-            celulaTitulo.innerHTML = filme.titulo;
-            celulaSinopse.innerHTML = filme.sinopse;
-        });
+        exibirTabela(".filmes", filmes);
+        exibirAlerta(
+            ".alert-filme",
+            "Filme cadastrado com sucesso!",
+            ["show", "alert-success"],
+            ["d-none"],
+            1500
+        );
     } else {
-        let alert = document.querySelector(".alert-filme");
-        alert.classList.add("show");
-        alert.classList.remove("d-none");
-        setTimeout(() => {
-            alert.classList.remove("show");
-            alert.classList.add("d-none");
-        }, 1500);
+        exibirAlerta(
+            ".alert-filme",
+            "Preencha todos os campos!",
+            ["show", "alert-danger"],
+            ["d-none"],
+            1500
+        );
     }
 }
 
@@ -66,46 +56,68 @@ async function cadastrarUsuario() {
                 login: usuarioCadastro,
                 password: senhaCadastro,
             };
-            const usuario = (await axios.post(URLcompleta, dados)).data;
+            await axios.post(URLcompleta, dados);
             usuarioCadastroInput.value = "";
             senhaCadastroInput.value = "";
-            let alert = document.querySelector(".alert");
-            alert.classList.add("show", "alert-success");
-            alert.classList.remove("d-none");
-            alert.innerHTML = "Usuário cadastrado com sucesso!";
-            setTimeout(() => {
-                alert.classList.remove("show", "alert-success");
-                alert.classList.add("d-none");
-                modalCadastro = bootstrap.Modal.getInstance(
-                    document.querySelector("#modalCadastro")
-                );
-                modalCadastro.hide();
-            }, 2000);
+            exibirAlerta(
+                ".alert-cadastro",
+                "Usuário cadastrado com sucesso!",
+                ["show", "alert-sucess"],
+                ["d-none"],
+                2000
+            );
+            esconderModal("#modalCadastro", 2000);
         } catch (error) {
             console.error(error);
-            let alert = document.querySelector(".alert");
-            alert.classList.add("show", "alert-danger");
-            alert.classList.remove("d-none");
-            alert.innerHTML = "Usuário já existente!";
-            setTimeout(() => {
-                alert.classList.remove("show", "alert-danger");
-                alert.classList.add("d-none");
-                modalCadastro = bootstrap.Modal.getInstance(
-                    document.querySelector("#modalCadastro")
-                );
-                modalCadastro.hide();
-                usuarioCadastroInput.value = "";
-                senhaCadastroInput.value = "";
-            }, 2000);
+            exibirAlerta(
+                ".alert",
+                "Usuário já existente!",
+                ["show", "alert-danger"],
+                ["d-none"],
+                2000
+            );
+            esconderModal("#modalCadastro", 2000);
         }
     } else {
-        let alert = document.querySelector(".alert");
-        alert.classList.add("show", "alert-danger");
-        alert.classList.remove("d-none");
-        alert.innerHTML = "Preencha todos os campos!";
-        setTimeout(() => {
-            alert.classList.remove("show", "alert-danger");
-            alert.classList.add("d-none");
-        }, 2000);
+        exibirAlerta(
+            ".alert",
+            "Preencha todos os campos!",
+            ["show", "alert-danger"],
+            ["d-none"],
+            2000
+        );
     }
+}
+
+function exibirAlerta(seletor, texto, classesAdd, classesRemove, timer) {
+    let alert = document.querySelector(seletor);
+    alert.innerHTML = texto;
+    alert.classList.add(...classesAdd);
+    alert.classList.remove(...classesRemove);
+    setTimeout(() => {
+        alert.classList.remove(...classesAdd);
+        alert.classList.add(...classesRemove);
+    }, timer);
+}
+
+function esconderModal(seletor, timer) {
+    setTimeout(() => {
+        let modal = bootstrap.Modal.getInstance(
+            document.querySelector(seletor)
+        );
+        modal.hide();
+    }, timer);
+}
+
+function exibirTabela(seletor, itens) {
+    let tabela = document.querySelector(seletor);
+    let corpo = tabela.getElementsByTagName("tbody")[0];
+    corpo.innerHTML=""
+    itens.forEach((item) => {
+        let linhaNova = corpo.insertRow(0);
+        let celulaTitulo = linhaNova.insertCell(0);
+        let celulaSinopse = linhaNova.insertCell(1);
+        celulaTitulo.innerHTML = item.titulo;
+        celulaSinopse.innerHTML = item.sinopse;
+    });
 }

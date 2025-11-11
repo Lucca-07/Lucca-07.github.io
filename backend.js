@@ -5,14 +5,12 @@ app.use(cors());
 import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
-import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import connectDB from "./modules/connect.js";
 import Filme from "./model/Filme.js";
 import Usuario from "./model/Usuario.js";
-import encrypt from "./modules/encrypt.js";
 
 //Obtem a lista de filmes
 //Requisição GET no endereço http://localhost:3000/filmes
@@ -57,7 +55,8 @@ app.post("/auth/signup", async (req, res) => {
         if (!password) {
             return res.status(400).json({ msg: "A senha é obrigatório" });
         }
-        const passHash = await encrypt(password);
+        const salt = await bcrypt.genSalt(12);
+        const passHash = await bcrypt.hash(password, salt);
         const usuario = new Usuario({
             login,
             password: passHash,
